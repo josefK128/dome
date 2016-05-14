@@ -1,0 +1,61 @@
+    var metastate = {
+      url: '^/{scene}/{i3d}/{i2d}/{base}/{ui}/{shot}',
+      onEnter: () => {
+        var delta_params = metastate.stateObj.delta_params,
+            scope,
+            name,
+            tuple,
+            template,
+            model,
+            template_view,
+            shot,
+            Camera3d,
+            narrative,
+            node;    // named node(s) in shot model
+
+        // fetch reference to narrative component controller-scope
+        narrative = metastate.narrative || 
+          metastate.Mediator.component('narrative');
+
+        // narrative has method to return reference to its scope<br>
+        // this scope is used when compiling all dynamic templates since
+        // it contains all models
+        scope = scope || narrative.scope();
+ 
+        // Camera3d
+        Camera3d = Camera3d || metastate.Camera3d;
+
+        // delta templates/models
+        for(let p of Object.keys(delta_params)){
+          if(delta_params[p].length > 0){
+            name = delta_params[p];
+            tuple = name.split(":");
+            template = tuple[0] || "";
+            model = tuple[1] || "";
+
+            switch(p){
+              case 'scene':
+                break;
+
+              case 'i3d':
+                // fetch the template_view from the cache
+                template_view = metastate.cache.get(`${template}.svg`);
+
+                // make model available on narrative component scope 
+                scope.i3d = metastate.Models.get('i3d', template, model) || {};
+                //for(let p of Object.keys(scope.i3d)){
+                //}
+
+                // change i3d template_view and webgl scene
+                // * NOTE: optionally can pass in procedurally created scene
+                Camera3d.changeTemplateScene(template);
+
+                // replace content of '#i3d' template-view container with the
+                // template_view fetched from the cache
+                $("#i3d").html(template_view);
+
+                // compile the template_view and all contained directives
+                // using the model (which is attached at scope.i3d)
+                metastate.compile($("#i3d").contents())(scope);
+                break;
+
