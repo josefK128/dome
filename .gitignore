@@ -16,7 +16,7 @@ node_modules
 docs
 
 # logs - created by setting index.html config
-logs
+#logs
 
 # history - can be created by 'gulp save-versions'
 history
