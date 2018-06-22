@@ -1,34 +1,61 @@
 # Include your project-specific ignores in this file
 # Read about how to use .gitignore: 
 # https://help.github.com/articles/ignoring-files
+# in the discussion below root is the clone root, i.e
+# the directory which contains .gitignore (this file)
 
-
-# node_modules - build locally from package.json
-# root> npm install --savedev
-# these files are development only
-# NOTE: app/libs from bower.json are app-dependencies
-# app/libs is built 
-# root> bower install --S
-node_modules
-#app/lib
-
-# docs - can be created via 'gulp docco'
+# NOTE: ./node_modules can be built from package.json
+# build node_modules locally from package.json by:
+# root (exp:dome-vr)> npm install 
+# However, save node_modules since the github repo will be used as a webVR
+# server on github pages
+#node_modules
 docs
+logs
 
-# logs - created by setting index.html config
-#logs
+# internal notes - last change
+# dome resources, notes, printer-versions, hide from transpile, etc.
+~*
+*.txt
+*.pr   
+*-pr   
+*-hide
 
-# history - can be created by 'gulp save-versions'
-history
+# NOTE: ./dist can be re-built by:
+# root> gulp build
+# root> gulp build-min
+# However there are needed dist directories in node_modules so do NOT ignore
 
-# app/build - can be created by 'gulp build' 'gulp build-min'
-app/build
+# NOTE: ./docs can be re-built in by
+# root> gulp docco
 
-# app/text-file-reminders
-app/*.txt
+# Optional npm cache directory
+.npm
 
+# Optional REPL history
+.node_repl_history
 
-# vim swp-files
-/**/*.swp
+# npm-debug
+npm-debug.log*
 
+# Vim swp-files
+*.swp
 
+# the following are all not expected to appear but included for completeness
+# Compiled source 
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+ 
+# Packages 
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
